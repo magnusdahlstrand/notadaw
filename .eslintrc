@@ -1,0 +1,26 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "process": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module"
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "strict": "warn",
+    "no-console": "off",
+    "quotes": ["error", "single"],
+    "no-unused-vars": "error",
+    "react/prop-types": "off",
+    "react/display-name": "off"
+  }
+}
