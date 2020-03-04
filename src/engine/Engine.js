@@ -6,6 +6,12 @@ class Engine {
 		this._updateListeners = [];
 		this.isReady = false;
 		this.isRecording = false;
+		for(let key of Object.getOwnPropertyNames(Object.getPrototypeOf(this))) {
+			let fn = this[key];
+			if (typeof fn === 'function') {
+				this[key] = fn.bind(this);
+			}
+		}
 	}
 	onUpdate(callback) {
 		this._updateListeners.push(callback);

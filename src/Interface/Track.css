@@ -1,0 +1,67 @@
+.Track {
+	--setup-width: 30vw;
+	--waveform-width: 30vw;
+	--name-height: 40px;
+	--waveform-height: 140px;
+	--track-height: calc(var(--name-height) + var(--waveform-height));
+	min-width: calc(var(--waveform-width) + var(--setup-width));
+	margin: 30px 0;
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.Track__name {
+	position: sticky;
+	left: 0;
+	height: var(--name-height);
+	line-height: var(--name-height);
+	margin-right: var(--setup-width);
+	user-select: text;
+	background: gold;
+	padding-left: 20px;
+	width: 100%;
+	box-sizing: border-box;
+}
+.Track__waveform {
+	min-width: var(--waveform-width);
+	background: teal;
+	flex: 1;
+	height: var(--waveform-height);
+}
+.Track__setup {
+	width: var(--setup-width);
+	padding: 10px;
+	box-sizing: border-box;
+	/* background: aqua; */
+}
+.isRecording .Track__setup {
+	background: red;
+	color: white;
+}
+
+.Track__sources {
+	--size: 30px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: calc(var(--size) * 2);
+	background: yellow;
+}
+.Track__source {
+	width: var(--size);
+	height: var(--size);
+	background: gray;
+	box-sizing: border-box;
+	color: white;
+	text-align: center;
+	line-height: var(--size);
+	border: 1px solid transparent;
+	cursor: pointer;
+}
+.Track__source:hover {
+	border-color: white;
+}
+.isActive {
+	background: lightblue;
+}

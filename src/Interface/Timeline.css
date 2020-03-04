@@ -1,0 +1,12 @@
+.Timeline {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	overflow-y: hidden;
+	overflow-x: scroll;
+}
+
+.Timeline__tracks {
+	padding-right: 40vw;
+}
