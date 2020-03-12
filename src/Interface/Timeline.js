@@ -9,7 +9,7 @@ const Timeline = ({ className, engine }) => (
 	<section className={classnames(className, css.Timeline)}>
 		<div className={css.Timeline__tracks}>
 			{engine.tracks.map((track) => (
-				<Track key={track.id} track={track} />
+				<Track key={track.id} track={track} engine={engine} />
 			))}
 		</div>
 	</section>

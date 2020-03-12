@@ -1,54 +1,43 @@
-const CHUNK_DURATION = 100; // ms
+import Clip from './Clip';
+
+// A Track is a collection of clips
 
 class Track {
 	constructor() {
 		this.id = `${Math.random()}`.substring(2);
-		console.log('this.id', this.id);
-		this.isReady = false;
+		this.clips = [];
+		this.currentSource = null;
+		this.currentClip = null;
 		this.isRecording = false;
-		this.stream = null;
-		this.recorder = null;
-		this.handleDataAvailable = this.handleDataAvailable.bind(this);
-		this.chunks = [];
 	}
-	handleDataAvailable(event) {
-		this.chunks.push(event.data);
+	// When selecting a new source, a new clip will be created
+	pickSource(source) {
+		this.currentSource = source;
 	}
-	async init(device) {
-		await this.createStream(device);
-		await this.createRecorder();
-		this.isReady = true;
-	}
-	async createStream(device) {
-		this.inputName = device.label;
-		const stream = await navigator.mediaDevices.getUserMedia({
-			audio: { deviceId: device.deviceId },
-		});
-		this.stream = stream;
-		return this;
-	}
-	async createRecorder() {
-		if (!this.stream) {
-			throw new Error(`createStream has to be called before createRecorder`);
+	createNewClip() {
+		if (!this.currentSource) {
+			throw new Error('Track: Cannot create new clip when no source is selected');
 		}
-		this.recorder = new MediaRecorder(this.stream);
-		this.recorder.ondataavailable = this.handleDataAvailable;
-		this.recorder.start(CHUNK_DURATION);
-		this.recorder.pause();
+		this.endCurrentClip();
+		const newClip = new Clip({ source: this.currentSource });
+		newClip.start();
+		this.currentClip = newClip;
+		this.clips.push(newClip);
+	}
+	endCurrentClip() {
+		const oldClip = this.currentClip;
+		if (oldClip) {
+			oldClip.end();
+		}
 	}
 	startRecording() {
+		this.createNewClip();
 		this.isRecording = true;
-		this.recorder.resume();
 	}
 	stopRecording() {
+		this.endCurrentClip();
 		this.isRecording = false;
-		this.recorder.pause();
-		// Should we requestData on the recorder after the pause to receive the last data?
-		const blob = new Blob(this.chunks);
-		const link = URL.createObjectURL(blob);
-		this.link = link;
 	}
-
 }
 
 export default Track;

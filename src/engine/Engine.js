@@ -1,4 +1,5 @@
 import Track from './Track';
+import InputSource from './InputSource';
 
 class Engine {
 	constructor() {
@@ -36,13 +37,25 @@ class Engine {
 		this.tracks = [];
 		this.devices = await this.listDevices();
 		this.isReady = true;
-		await this.createTracks();
+		this.sources = await this.setupInputSources();
+		await this.createTracks(this.sources);
 		this._triggerUpdate();
 		return this;
 	}
-	async createTracks() {
-		await Promise.all(this.devices.input.map((device) => this.addTrack(device)));
-		return this;
+	getCurrentTime() {
+		return this.context.currentTime;
+	}
+	async setupInputSources() {
+		return this.devices.input.map((inputDevice) => this.addInputSource(inputDevice));
+	}
+	async createTracks(sources) {
+		return await Promise.all(sources.map((source) => this.addTrack(source)));
+	}
+	addInputSource(inputDevice) {
+		const source = new InputSource({ engine: this, device: inputDevice });
+		source.init();
+		this._triggerUpdate();
+		return source;
 	}
 	async listDevices() {
 		const devices = await navigator.mediaDevices.enumerateDevices();
@@ -53,9 +66,9 @@ class Engine {
 			output,
 		};
 	}
-	async addTrack(device) {
+	async addTrack(source) {
 		const track = new Track();
-		await track.init(device);
+		await track.pickSource(source);
 		this.tracks.push(track);
 		this._triggerUpdate();
 		return track;

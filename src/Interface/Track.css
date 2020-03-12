@@ -4,12 +4,12 @@
 	--name-height: 40px;
 	--waveform-height: 140px;
 	--track-height: calc(var(--name-height) + var(--waveform-height));
-	min-width: calc(var(--waveform-width) + var(--setup-width));
+	/* min-width: calc(var(--waveform-width) + var(--setup-width)); */
 	margin: 30px 0;
 	position: relative;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-rows: [top] var(--name-height) [middle] var(--waveform-height) [bottom];
+	grid-template-columns: [clips] auto [divider] var(--setup-width) [setup];
 }
 .Track__name {
 	position: sticky;
@@ -22,21 +22,30 @@
 	padding-left: 20px;
 	width: 100%;
 	box-sizing: border-box;
+	grid-row: top / middle;
+	grid-column: clips / divider;
 }
-.Track__waveform {
-	min-width: var(--waveform-width);
+.Track.isRecording .Track__name {
+	background: red;
+}
+.Track__clips {
+	grid-row: middle / bottom;
+	grid-column: clips / divider;
+	/* min-width: var(--waveform-width); */
 	background: teal;
-	flex: 1;
-	height: var(--waveform-height);
+	/* height: var(--waveform-height); */
+	white-space: nowrap;
 }
 .Track__setup {
-	width: var(--setup-width);
+	grid-row: middle / bottom;
+	grid-column: divider / setup;
+	background: #eee;
+	/* width: var(--setup-width); */
 	padding: 10px;
 	box-sizing: border-box;
 	/* background: aqua; */
 }
 .isRecording .Track__setup {
-	background: red;
 	color: white;
 }
 

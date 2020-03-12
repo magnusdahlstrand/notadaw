@@ -1,28 +1,36 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import Clip from '~/Interface/Clip';
+
 import css from './Track.css';
 
-const Track = ({ track }) => (
+const Track = ({ track, engine }) => (
 	<article className={classnames(css.Track, track.isRecording && css.isRecording)}>
 		<h1 className={css.Track__name}>{track.inputName}</h1>
-		<div className={css.Track__waveform}>
+		<section className={css.Track__clips}>
+			{track.clips.map((clip) => (
+				<Clip key={clip.id} clip={clip} track={track} engine={engine} />
+			))}
 			{track.link && (
 				<audio src={track.link} controls />
 			)}
-		</div>
-		<div className={css.Track__setup}>
+		</section>
+		<section className={css.Track__setup}>
 			<div className={css.Track__sources}>
-				<div className={css.Track__source}>1</div>
-				<div className={css.Track__source}>2</div>
-				<div className={classnames(css.Track__source, css.isActive)}>3</div>
-				<div className={css.Track__source}>4</div>
-				<div className={css.Track__source}>5</div>
-				<div className={css.Track__source}>6</div>
-				<div className={css.Track__source}>7</div>
-				<div className={css.Track__source}>8</div>
+				{engine.sources.map((source) => (
+					<div
+						key={source.id}
+						className={classnames(
+							css.Track__source,
+							track.currentSource === source && css.isActive
+						)}
+					>
+						{source.name}
+					</div>
+				))}
 			</div>
-		</div>
+		</section>
 	</article>
 );
 
