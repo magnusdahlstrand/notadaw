@@ -32,6 +32,7 @@ class Track {
 		if (oldClip) {
 			oldClip.end();
 		}
+		this.currentClip = null;
 	}
 	startRecording() {
 		this.createNewClip();

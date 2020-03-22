@@ -16,6 +16,9 @@ class Clip {
 		this.isRecording = true;
 	}
 	end() {
+		if (!this.isRecording) {
+			throw new Error(`Clip has already finished recording, cannot end`);
+		}
 		this.isRecording = false;
 		this.endTime = this.source.getCurrentTime();
 	}
