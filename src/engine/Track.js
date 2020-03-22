@@ -10,6 +10,9 @@ class Track {
 		this.currentClip = null;
 		this.isRecording = false;
 	}
+	get inputName() {
+		return this.currentSource.inputName;
+	}
 	// When selecting a new source, a new clip will be created
 	pickSource(source) {
 		this.currentSource = source;
