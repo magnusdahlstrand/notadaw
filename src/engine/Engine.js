@@ -5,6 +5,7 @@ class Engine {
 	constructor() {
 		console.log('Engine', this);
 		this._updateListeners = [];
+		this._pingListeners = [];
 		this.isReady = false;
 		this.isRecording = false;
 		for(let key of Object.getOwnPropertyNames(Object.getPrototypeOf(this))) {
@@ -27,10 +28,27 @@ class Engine {
 	}
 	_triggerUpdate() {
 		clearTimeout(this._updateTimeout);
-		const timecode = (new Date()).getTime();
+		const timecode = this.getCurrentTime();
 		this._updateTimeout = setTimeout(() => {
 			this._updateListeners.forEach((listener) => listener(timecode));
 		}, 0);
+	}
+	onPing(callback) {
+		this._pingListeners.push(callback);
+		return () => {
+			const index = this._pingListeners.indexOf(callback);
+			if (index !== -1) {
+				this._pingListeners.splice(index, 1);
+			} else {
+				console.warn('Attempted unbind of unbound onPing handler');
+			}
+		};
+	}
+	_triggerPing() {
+		clearTimeout(this._pingTimeout);
+		const timecode = this.getCurrentTime();
+		this._pingListeners.forEach((listener) => listener(timecode));
+		requestAnimationFrame(this._triggerPing);
 	}
 	async init() {
 		this.context = new AudioContext();
@@ -40,6 +58,7 @@ class Engine {
 		this.sources = await this.setupInputSources();
 		await this.createTracks(this.sources);
 		this._triggerUpdate();
+		this._triggerPing();
 		return this;
 	}
 	getCurrentTime() {
