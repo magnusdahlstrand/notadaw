@@ -11,6 +11,12 @@ class Clip {
 		}
 		this.source = source;
 	}
+	get length() {
+		if (this.isRecording) {
+			return this.source.getCurrentTime() - this.startTime;
+		}
+		return this.endTime - this.startTime;
+	}
 	start() {
 		this.startTime = this.source.getCurrentTime();
 		this.isRecording = true;

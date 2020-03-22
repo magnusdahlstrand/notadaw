@@ -1,6 +1,5 @@
 .Clip {
 	outline: 1px solid black;
-	min-width: 100px;
 	height: 100%;
 	display: inline-block;
 }

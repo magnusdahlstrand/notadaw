@@ -9,15 +9,22 @@ class Interface extends Component {
 	constructor(props) {
 		super(props);
 		this.handleEngineUpdate = this.handleEngineUpdate.bind(this);
+		this.handleEnginePing = this.handleEnginePing.bind(this);
 		if (!this.props.engine) {
 			throw new Error('Engine missing');
 		}
 	}
 	componentDidMount() {
-		this._engineListener = this.props.engine.onUpdate(this.handleEngineUpdate);
+		this._engineUpdateListener = this.props.engine.onUpdate(this.handleEngineUpdate);
+		this._enginePingListener = this.props.engine.onPing(this.handleEnginePing);
 	}
 	componentWillUnmount() {
 		this._engineListener();
+	}
+	handleEnginePing(timecode) {
+		this.setState({
+			timecode,
+		});
 	}
 	handleEngineUpdate(timecode) {
 		this.setState({
