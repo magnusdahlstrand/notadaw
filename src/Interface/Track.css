@@ -55,12 +55,11 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	width: calc(var(--size) * 2);
-	background: yellow;
 }
 .Track__source {
 	width: var(--size);
 	height: var(--size);
-	background: gray;
+	background: gainsboro;
 	box-sizing: border-box;
 	color: white;
 	text-align: center;
@@ -72,5 +71,5 @@
 	border-color: white;
 }
 .isActive {
-	background: lightblue;
+	background: skyblue;
 }
