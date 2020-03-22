@@ -32,7 +32,6 @@
 	grid-row: middle / bottom;
 	grid-column: clips / divider;
 	/* min-width: var(--waveform-width); */
-	background: teal;
 	/* height: var(--waveform-height); */
 	white-space: nowrap;
 }

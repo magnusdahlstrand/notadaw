@@ -1,9 +1,9 @@
 .Clip {
-	outline: 1px solid black;
+	background: lightgray;
 	height: 100%;
 	display: inline-block;
 }
 
 .Clip.isRecording {
-	outline: 1px solid red;
+	background: red;
 }
