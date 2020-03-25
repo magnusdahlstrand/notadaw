@@ -1,4 +1,5 @@
 import Track from './Track';
+import Mixer from './Mixer';
 import InputSource from './InputSource';
 
 class Engine {
@@ -53,6 +54,7 @@ class Engine {
 	async init() {
 		this.context = new AudioContext();
 		this.tracks = [];
+		this.mixer = new Mixer(this);
 		this.devices = await this.listDevices();
 		this.isReady = true;
 		this.sources = await this.setupInputSources();
@@ -86,7 +88,7 @@ class Engine {
 		};
 	}
 	async addTrack(source) {
-		const track = new Track();
+		const track = new Track(this);
 		await track.pickSource(source);
 		this.tracks.push(track);
 		this._triggerUpdate();
@@ -107,6 +109,16 @@ class Engine {
 		this.isRecording = false;
 		this._triggerUpdate();
 		return this;
+	}
+	startPlayback() {
+		console.log('Start playback');
+		this.tracks.forEach(async (track) => {
+			const buffer = await track.getBuffer();
+			const bufferSource = this.context.createBufferSource();
+			bufferSource.buffer = buffer;
+			bufferSource.connect(track.channel.volume);
+			bufferSource.start(this.getCurrentTime());
+		})
 	}
 }
 

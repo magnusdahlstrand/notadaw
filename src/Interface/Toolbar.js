@@ -13,6 +13,7 @@ const Toolbar = ({ className, engine }) => (
 			? (<button onClick={engine.stopRecording}>Stop</button>)
 			: (<button onClick={engine.startRecording}>Record</button>)
 		}
+		<button onClick={engine.startPlayback}>Play</button>
 
 	</aside>
 );

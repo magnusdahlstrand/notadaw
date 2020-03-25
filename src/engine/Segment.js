@@ -4,9 +4,11 @@ class Segment {
 	constructor({ chunk, startTime, length }) {
 		this.chunk = chunk;
 		this.startTime = startTime;
-		this.endTime = null;
 		this.length = length;
 		this.waveform = new Waveform(chunk);
+	}
+	get endTime() {
+		return this.startTime + this.length;
 	}
 	isWithinTimespan(start, end) {
 		// TODO: This only selects segments which are fully within the timespan
