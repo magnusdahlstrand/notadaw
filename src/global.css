@@ -9,6 +9,7 @@ html, body {
 	background: var(--white);
 	color: var(--black);
 	height: 100%;
+	overflow: hidden;
 }
 
 body {
