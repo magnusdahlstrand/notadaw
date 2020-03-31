@@ -16,3 +16,8 @@
 	top: 0;
 	left: 0;
 }
+
+.node:hover {
+	outline: 4px solid black;
+	z-index: 100;
+}

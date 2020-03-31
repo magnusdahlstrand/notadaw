@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, createRef } from 'react';
 
 import css from './GridScroll.css';
 
@@ -11,7 +11,9 @@ class GridScrollPrototype extends Component {
 				y: 0,
 			},
 			nodes: [this.createNewNode({ x: 0, y: 0 })],
+			selection: [],
 		};
+		this.$rootEl = createRef();
 		this.handleWheel = this.handleWheel.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 	}
@@ -34,19 +36,27 @@ class GridScrollPrototype extends Component {
 		})
 	}
 	handleClick(event) {
-		console.log('click!', event);
 		const data = {
 			pageX: event.pageX,
 			pageY: event.pageY,
+			isClickOnGrid: event.target === this.$rootEl.current,
+			shiftKey: event.shiftKey,
+			altKey: event.altKey,
 		};
-		this.setState(({ origin, nodes }) => {
-			const x = data.pageX - origin.x;
-			const y = data.pageY - origin.y;
-			const newNode = this.createNewNode({ x, y });
-			return {
-				nodes: [...nodes, newNode]
-			}
-		})
+		if (data.isClickOnGrid) {
+			this.setState(({ origin, nodes }) => {
+				const x = data.pageX - origin.x;
+				const y = data.pageY - origin.y;
+				const newNode = this.createNewNode({ x, y });
+				return {
+					nodes: [...nodes, newNode]
+				}
+			});
+		} else {
+			const clickedNode = this.state.nodes.find((node) => event.target === node.$el.current);
+			console.log('clicked!', clickedNode);
+			this.selectNode(clickedNode, { extend: data.shiftKey, subtract: data.altKey });
+		}
 	}
 	createNewNode({ x, y }) {
 		return {
@@ -55,7 +65,20 @@ class GridScrollPrototype extends Component {
 			y: y,
 			w: 300,
 			h: 150,
+			$el: createRef(),
 		}
+	}
+	selectNode(node, { extend, subtract }) {
+		this.setState(({ selection }) => {
+			return {
+				selection: extend ?
+					[...selection, node] :
+					(subtract ?
+						selection.filter((selected) => selected !== node) :
+						[node]
+					),
+			};
+		})
 	}
 	getNodeStyle(node) {
 		const origin = this.state.origin;
@@ -65,21 +88,35 @@ class GridScrollPrototype extends Component {
 			width: `${node.w}px`,
 			height: `${node.h}px`,
 			transform: `translate(${x}px, ${y}px)`,
+			backgroundColor: this.isSelected(node) ? 'white' : 'lightgray',
 		};
+	}
+	isSelected(node) {
+		return this.state.selection.includes(node);
 	}
 	renderNodes() {
 		const { nodes } = this.state;
 		return (
 			<Fragment>
 				{nodes.map((node) => (
-					<div key={node.id} style={this.getNodeStyle(node)} className={css.node} />
+					<div
+						key={node.id}
+						ref={node.$el}
+						style={this.getNodeStyle(node)}
+						className={css.node}
+					/>
 				))}
 			</Fragment>
 		)
 	}
 	render() {
 		return (
-			<main className={css.root} onWheel={this.handleWheel} onClick={this.handleClick}>
+			<main
+				className={css.root}
+				onWheel={this.handleWheel}
+				onClick={this.handleClick}
+				ref={this.$rootEl}
+			>
 				{this.renderNodes()}
 			</main>
 		);
