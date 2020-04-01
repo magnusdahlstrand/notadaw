@@ -2,6 +2,21 @@ import React, { Component, Fragment, createRef } from 'react';
 
 import css from './GridScroll.css';
 
+const USAGE = `usage:
+
+- Mouse UI:
+	- Swipe to pan
+	- Click to add item
+	- Click to select item
+	- Shift-click to add item to selection
+	- Alt-click to remove item from selection
+- Keyboard UI:
+	- Press T to add item
+	- Press S to select
+	- Press shift+S to add to selection
+	- Press alt+S to remove from selection
+`;
+
 const GRID = {
 	x: 50,
 	y: 150,
@@ -35,6 +50,7 @@ class GridScrollPrototype extends Component {
 	}
 	componentDidMount() {
 		this.$rootEl.current.focus();
+		console.info(USAGE);
 	}
 	handleWheel(event) {
 		const data = {
