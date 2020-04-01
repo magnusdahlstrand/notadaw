@@ -2,6 +2,15 @@ import React, { Component, Fragment, createRef } from 'react';
 
 import css from './GridScroll.css';
 
+const GRID = {
+	x: 50,
+	y: 150,
+};
+
+const snap = (value, size) => {
+	return value - (value % size);
+}
+
 class GridScrollPrototype extends Component {
 	constructor(props) {
 		super(props);
@@ -90,8 +99,8 @@ class GridScrollPrototype extends Component {
 		this.setState(({ origin, nodes }) => {
 			const newNode = {
 				id: Math.random(),
-				x: x - origin.x,
-				y: y - origin.y,
+				x: snap(x - origin.x, GRID.x),
+				y: snap(y - origin.y, GRID.y),
 				w: 300,
 				h: 150,
 				$el: createRef(),
